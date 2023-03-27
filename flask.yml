@@ -1,0 +1,20 @@
+---
+
+- name: clone webapp
+  hosts: g1
+  become: yes
+
+  tasks:
+  - name: install git
+    yum:
+      name: git
+      state: present
+
+
+  - name: host code
+    git:
+      repo: https://github.com/Morjay007/flask_webapp.git
+      dest: /var/www/html/
+      force: yes
+
+...
