@@ -5,6 +5,11 @@
   become: yes
 
   tasks:
+  - name: Install required python
+      yum:
+        name: python3
+        state: present
+
   - name: install git
     yum:
       name: git
