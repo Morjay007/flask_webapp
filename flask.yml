@@ -37,9 +37,9 @@
       chdir: /var/www/flask-app
 
   - name: Install requirements
-     command: venv/bin/pip install -r requirements.txt
-     args:
-       chdir: /var/www/flask-app
+    command: venv/bin/pip install -r requirements.txt
+    args:
+      chdir: /var/www/flask-app
 
     
 
