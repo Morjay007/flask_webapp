@@ -1,25 +1,79 @@
+# Ansible playbook for deploying a Flask app
+
 ---
-
-- name: clone webapp
-  hosts: g1
+# Install system apt packages
+- hosts: g1
   become: yes
-
+  become_method: sudo
   tasks:
-  - name: Install required python
-    yum:
-      name: python3
-      state: present
+  - name: update cache
+    yum: name=python-software-properties state=present update_cache=yes cache_valid_time=43200
+  - name: disable lighttpd
+    systemd: name=lighttpd state=stopped enabled=no  # To avoid conflicts with nginx
+  - name: install packages
+    yum: name={{item}} state=installed
+    with_items:
 
-  - name: install git
-    yum:
-      name: git
-      state: present
+      - python3-pip
+      - python3-dev
+      - nginx
 
-
-  - name: host code
+# Install the app, note: don't do these tasks with become sudo
+- hosts: webservers
+  tasks:
+  - name: clone repo
     git:
-      repo: https://github.com/Morjay007/flask_webapp.git
-      dest: /var/www/html/
-      force: yes
+      repo: 'https://github.com/Morjay007/flask_webapp.git'
+      dest: /home/ec2-user/flask_webapp
+      update: yes  # Does a git pull if the repo already exists
+  - name: install modules in a virtualenv
+    pip:
+      requirements: /home/centos/flask_webapp/requirements.txt
+      virtualenv: /home/centos/flask_webapp/env
+      virtualenv_python: python3.5
 
-...
+# Configure app systemd service and nginx
+- hosts: g1
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: template systemd service config
+    copy:
+      src: .service
+      dest: /etc/systemd/system/flask_webapp.service
+  - name: start systemd app service
+    systemd: name=flask_webapp.service state=restarted enabled=yes
+  - name: template nginx site config
+    template:
+      src: .nginx
+      dest: /etc/nginx/sites-available/flask_webapp
+  - name: remove default nginx site config
+    file: path=/etc/nginx/sites-enabled/default state=absent
+  # - command: mv /etc/nginx/sites-enabled/default /tmp/nginx.sites-enabled.default
+  - name: enable nginx site
+    file:
+      src: /etc/nginx/sites-available/flask_app
+      dest: /etc/nginx/sites-enabled/default
+      state: link
+      force: yes
+  - name: restart nginx
+    systemd: name=nginx state=restarted enabled=yes
+  - name: open firewall for nginx
+    ufw:
+      rule: allow
+      name: Nginx Full
+
+# Run a quick test to verify the site is working
+- hosts: webservers
+  tasks:
+  - name: get url
+    get_url:
+      url: http://3.237.93.50
+      dest: /tmp/index.html
+  - name: read html
+    shell: cat /tmp/index.html
+    register: html_contents
+  - name: check for string in html
+    when: html_contents.stdout.find('hello') != -1
+    debug: msg="success!"
+
