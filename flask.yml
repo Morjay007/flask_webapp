@@ -6,10 +6,10 @@
   become: yes
   become_method: sudo
   tasks:
-  - name: update cache
-    apt: name=software-properties-common state=present update_cache=yes cache_valid_time=43200
-  - name: disable lighttpd
-    systemd: name=lighttpd state=stopped enabled=no  # To avoid conflicts with nginx
+  #- name: update cache
+   # apt: name=software-properties-common state=present update_cache=yes cache_valid_time=43200
+  #- name: disable lighttpd
+   # systemd: name=lighttpd state=stopped enabled=no  # To avoid conflicts with nginx
   - name: install packages
     apt: name={{item}} state=installed
     with_items:
