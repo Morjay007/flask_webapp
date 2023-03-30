@@ -19,7 +19,7 @@
       - nginx
 
 # Install the app, note: don't do these tasks with become sudo
-- hosts: webservers
+- hosts: g1
   tasks:
   - name: clone repo
     git:
@@ -64,7 +64,7 @@
       name: Nginx Full
 
 # Run a quick test to verify the site is working
-- hosts: webservers
+- hosts: g1
   tasks:
   - name: get url
     get_url:
