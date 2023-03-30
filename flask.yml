@@ -2,7 +2,7 @@
 
 ---
 # Install system apt packages
-- hosts: g1
+- hosts: n1
   become: yes
   become_method: sudo
   tasks:
@@ -19,7 +19,7 @@
       - nginx
 
 # Install the app, note: don't do these tasks with become sudo
-- hosts: g1
+- hosts: n1
   tasks:
   - name: clone repo
     git:
@@ -33,7 +33,7 @@
       virtualenv_python: python3.5
 
 # Configure app systemd service and nginx
-- hosts: g1
+- hosts: n1
   become: yes
   become_method: sudo
   tasks:
@@ -64,7 +64,7 @@
       name: Nginx Full
 
 # Run a quick test to verify the site is working
-- hosts: g1
+- hosts: n1
   tasks:
   - name: get url
     get_url:
