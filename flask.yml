@@ -32,17 +32,17 @@
      # virtualenv: /home/ubuntu/flask_webapp/env
      # virtualenv_python: python3.5
      
-   - name: Install virtual environment
+ - name: Install virtual environment
      command: pip3 install virtualenv
      args:
        chdir: /var/www/flask-app
 
-   - name: Create virtual environment
+  - name: Create virtual environment
      command: virtualenv venv
      args:
        chdir: /var/www/flask-app
 
-   - name: Install requirements
+  - name: Install requirements
      command: venv/bin/pip install -r requirements.txt
      args:
        chdir: /var/www/flask-app
