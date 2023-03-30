@@ -32,6 +32,10 @@
       requirements: /home/ubuntu/flask_webapp/requirements.txt
       virtualenv: /home/ubuntu/flask_webapp/env
       virtualenv_python: python3.5
+    tags:
+      - venv
+    environment:
+      PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
 
 # Configure app systemd service and nginx
 - hosts: n1
