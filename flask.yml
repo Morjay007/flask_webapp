@@ -26,15 +26,28 @@
       repo: 'https://github.com/Morjay007/flask_webapp.git'
       dest: /home/ubuntu/flask_webapp
       update: yes  # Does a git pull if the repo already exists
-  - name: install modules in a virtualenv
-    pip:
-      requirements: /home/ubuntu/flask_webapp/requirements.txt
-      virtualenv: /home/ubuntu/flask_webapp/env
-      virtualenv_python: python3.5
-    tags:
-      - venv
-    environment:
-      PATH: "{{ ansible_env.PATH }}:{{ ansible_user_dir }}/.local/bin"
+#  - name: install modules in a virtualenv
+   # pip:
+    #  requirements: /home/ubuntu/flask_webapp/requirements.txt
+     # virtualenv: /home/ubuntu/flask_webapp/env
+     # virtualenv_python: python3.5
+     
+   - name: Install virtual environment
+     command: pip3 install virtualenv
+     args:
+       chdir: /var/www/flask-app
+
+   - name: Create virtual environment
+     command: virtualenv venv
+     args:
+       chdir: /var/www/flask-app
+
+   - name: Install requirements
+     command: venv/bin/pip install -r requirements.txt
+     args:
+       chdir: /var/www/flask-app
+
+    
 
 # Configure app systemd service and nginx
 - hosts: n1
