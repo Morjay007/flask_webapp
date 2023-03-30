@@ -7,11 +7,11 @@
   become_method: sudo
   tasks:
   - name: update cache
-    yum: name=python-software-properties state=present update_cache=yes cache_valid_time=43200
+    apt: name=python-software-properties state=present update_cache=yes cache_valid_time=43200
   - name: disable lighttpd
     systemd: name=lighttpd state=stopped enabled=no  # To avoid conflicts with nginx
   - name: install packages
-    yum: name={{item}} state=installed
+    apt: name={{item}} state=installed
     with_items:
 
       - python3-pip
