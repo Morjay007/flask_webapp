@@ -25,12 +25,12 @@
   - name: clone repo
     git:
       repo: 'https://github.com/Morjay007/flask_webapp.git'
-      dest: /home/ec2-user/flask_webapp
+      dest: /home/ubuntu/flask_webapp
       update: yes  # Does a git pull if the repo already exists
   - name: install modules in a virtualenv
     pip:
-      requirements: /home/centos/flask_webapp/requirements.txt
-      virtualenv: /home/centos/flask_webapp/env
+      requirements: /home/ubuntu/flask_webapp/requirements.txt
+      virtualenv: /home/ubuntu/flask_webapp/env
       virtualenv_python: python3.5
 
 # Configure app systemd service and nginx
