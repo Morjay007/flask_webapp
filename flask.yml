@@ -29,17 +29,17 @@
   - name: Install virtual environment
     command: pip3 install virtualenv
     args:
-      chdir: /var/www/flask-app
+      chdir: /var/www/flask_app
 
   - name: Create virtual environment
     command: virtualenv venv
     args:
-      chdir: /var/www/flask-app
+      chdir: /var/www/flask_app
 
   - name: Install requirements
     command: venv/bin/pip install -r requirements.txt
     args:
-      chdir: /var/www/flask-app
+      chdir: /var/www/flask_app
 
     
 
